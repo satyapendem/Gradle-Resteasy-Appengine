@@ -1,0 +1,103 @@
+group 'com.application.sample'
+version '1.0-SNAPSHOT'
+
+
+ext {
+    libsVersions = [
+            gae              : "1.9.53",
+            gaeDatanucleus   : "2.1.2",
+            gaeJdo           : "3.1.3",
+            gradleGae        : "1.9.49",
+            resteasy         : "3.0.19.Final",
+            jackson          : "2.8.7",
+            servletApi       : "2.5",
+            lombok           : "1.16.12",
+            slf4jLog4j12     : "1.7.22",
+            Jsoup            : "1.9.2",
+            slf4jLog4j12     : "1.7.22"
+    ]
+    libraries = [
+        servletApi       : "javax.servlet:servlet-api:${libsVersions.servletApi}",
+        gaeJavaSdk       : "com.google.appengine:appengine-java-sdk:${libsVersions.gae}",
+        gaeApiSdk        : "com.google.appengine:appengine-api-1.0-sdk:${libsVersions.gae}",
+        gaeJdo           : ["org.datanucleus:datanucleus-api-jdo:${libsVersions.gaeJdo}",
+                            "com.google.appengine.orm:datanucleus-appengine:${libsVersions.gaeDatanucleus}",
+                            "javax.jdo:jdo2-api:2.3-eb"],
+
+        gradleGae        : "com.google.appengine:gradle-appengine-plugin:${libsVersions.gradleGae}",
+        resteasy         : [
+                "org.jboss.resteasy:resteasy-jaxrs:${libsVersions.resteasy}",
+                "org.jboss.resteasy:resteasy-jackson2-provider:${libsVersions.resteasy}"
+        ],
+        jackson          : ["com.fasterxml.jackson.core:jackson-annotations:${libsVersions.jackson}",
+                            "com.fasterxml.jackson.core:jackson-databind:${libsVersions.jackson}"
+        ],
+        Jsoup            : "org.jsoup:jsoup:${libsVersions.Jsoup}",
+    ]
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'war'
+apply plugin: 'appengine'
+
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    jcenter()
+}
+
+
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.49'
+    }
+}
+
+
+dependencies {
+    compileOnly libraries.servletApi
+
+    appengineSdk libraries.gaeJavaSdk
+    compile libraries.gaeJdo
+
+    compile libraries.resteasy
+
+    compile 'com.google.gcm:gcm-server:1.0.0'
+    compile 'org.bitbucket.b_c:jose4j:0.5.2'
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile group: 'org.jboss.resteasy', name: 'resteasy-multipart-provider', version: '3.0.19.Final'
+
+    compile libraries.Jsoup
+    compile libraries.jackson
+
+    compile "org.slf4j:slf4j-log4j12:${libsVersions.slf4jLog4j12}"
+    compileOnly "org.projectlombok:lombok:${libsVersions.lombok}"
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+
+appengine {
+    httpPort = 8080
+    downloadSdk = true
+
+    appcfg {
+        oauth2 = true
+    }
+    enhancer {
+        version = "v2"
+        api = "jdo"
+        enhanceOnBuild = true
+    }
+}
+
