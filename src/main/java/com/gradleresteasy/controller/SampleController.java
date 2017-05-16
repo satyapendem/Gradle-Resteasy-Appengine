@@ -1,4 +1,4 @@
-package com.gradleresteasy.api.controller;
+package com.gradleresteasy.controller;
 
 import javax.ws.rs.Path;
 

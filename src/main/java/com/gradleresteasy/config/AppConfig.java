@@ -1,4 +1,4 @@
-package com.gradleresteasy.api.config;
+package com.gradleresteasy.config;
 
 
 import javax.ws.rs.core.Application;
