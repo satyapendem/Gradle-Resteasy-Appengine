@@ -1,5 +1,6 @@
+build/
 .gradle/
 .idea/
-gradle/
 GradleResteasy.ipr
 GradleResteasy.iws
+gradle/
